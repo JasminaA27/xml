@@ -21,7 +21,28 @@ while ($pe = mysqli_fetch_assoc($resultado)) {
     $nombre_pe = $xml->createElement('nombre', $pe['nombre']);
     $num_pe->appendChild($nombre_pe);
 
-    $et1->appendChild($num_pe);
+    $et_plan = $xml->createElement('planes_estudio');
+    $consulta_plan = "SELECT * FROM sigi_planes_estudio WHERE id_programa_estudios=".$pe['id'];
+    $resultado_plan = $conexion->query($consulta_plan);
+    while ($resultados_plan = mysqli_fetch_assoc($resultado_plan)) {
+
+        $plan = $xml->createElement('plan_'.$resultados_plan['id']);
+
+        $nombre_plan = $xml->createElement('nombre', $resultados_plan['nombre']);
+        $plan->appendChild($nombre_plan);
+
+        $resolucion_plan = $xml->createElement('resolucion', $resultados_plan['resolucion']);
+        $plan->appendChild($resolucion_plan);
+
+        $fecha_registro_plan = $xml->createElement('fecha_registro', $resultados_plan['fecha_registro']);
+        $plan->appendChild($fecha_registro_plan);
+        
+        $et_plan->appendChild($plan);
+
+    }
+
+$num_pe->appendChild($et_plan);
+$et1->appendChild($num_pe);
 }
 
 $archivo = "ies_db.xml";
